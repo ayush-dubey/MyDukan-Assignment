@@ -19,7 +19,7 @@ public class ApplicationConstants {
 	public static final  String GROUP_DESC = "group description";
 	public static final  String GROUP_IS_ACTIVE = "isActive";
 	
-	public static final String GROUP_INDEX="group";
+	public static final String GROUP_INDEX="ayush_group";
 	public static final String GROUP_TYPE="group_type";
 	
 	public static final String GROUP_LIST="GROUP_LIST";

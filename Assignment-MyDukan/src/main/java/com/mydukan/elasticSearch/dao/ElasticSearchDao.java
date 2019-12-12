@@ -41,11 +41,15 @@ public interface ElasticSearchDao {
 	/**
 	 * Gets all the groups available from Elastic Search Engine</br>
 	 * Takes from & size as input </br>
-	 * From indicate the starting range and Size indicates the total number of documents
+	 * From indicates the starting range and Size indicates the total number of documents
 	 * 
 	 * @return
 	 */
 	public List<Group> getAllGroup(int from,int size);
-
+	
+	/**
+	 * Updates only the product list of group 
+	 * @param group
+	 */
 	void updateGroupProductList(Group group);
 }

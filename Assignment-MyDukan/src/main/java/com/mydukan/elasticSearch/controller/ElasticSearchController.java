@@ -14,6 +14,7 @@ import com.mydukan.elasticSearch.beans.AddProductDTO;
 import com.mydukan.elasticSearch.beans.Group;
 import com.mydukan.elasticSearch.beans.Product;
 import com.mydukan.elasticSearch.constants.ApplicationConstants;
+import com.mydukan.elasticSearch.exceptions.AssignmentException;
 import com.mydukan.elasticSearch.service.ElasticSearchService;
 
 @RestController
@@ -27,11 +28,14 @@ public class ElasticSearchController {
 	public Map<String,Object> getGroup(@RequestParam String groupName) {
 		Group group =service.getGroup(groupName); 
 		Map<String,Object> returnMap = new HashMap<>();
-		returnMap.put(ApplicationConstants.API_RESPONSE, group);
+		if(group!=null)
+			returnMap.put(ApplicationConstants.API_RESPONSE, group);
+		else
+			returnMap.put(ApplicationConstants.API_RESPONSE, "No Data Found For Group Name : "+groupName);
 		return returnMap;
 	}
 	
-	@RequestMapping(value="/updateProductPrice",method = RequestMethod.POST)
+	@RequestMapping(value="/updateProductPrice",method = RequestMethod.PUT)
 	public Map<String,Object> updateProductPrice(@RequestParam long productSerialNo,
 			@RequestParam String groupName, @RequestParam double price) {
 		service.updateProductPrice(productSerialNo, groupName, price);
@@ -52,7 +56,7 @@ public class ElasticSearchController {
 	
 	@RequestMapping(value="/changeProductGroup",method = RequestMethod.POST)
 	public Map<String,Object> changeProductGroup(@RequestParam long productSerialNo,
-			@RequestParam String currentGroupName,@RequestParam String newGroupName) {
+			@RequestParam String currentGroupName,@RequestParam String newGroupName) throws AssignmentException {
 		
 		service.changeProductGroup(productSerialNo, currentGroupName, newGroupName);
 		Map<String,Object> returnMap = new HashMap<>();

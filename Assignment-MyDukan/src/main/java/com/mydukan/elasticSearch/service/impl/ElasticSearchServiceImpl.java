@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import com.mydukan.elasticSearch.beans.Product;
 import com.mydukan.elasticSearch.constants.ApplicationConstants;
 import com.mydukan.elasticSearch.dao.ElasticSearchDao;
 import com.mydukan.elasticSearch.exceptions.AssignmentException;
+import com.mydukan.elasticSearch.exceptions.GroupNotFoundException;
 import com.mydukan.elasticSearch.exceptions.InvalidExcelFileExcetion;
 import com.mydukan.elasticSearch.service.ElasticSearchService;
 import com.mydukan.elasticSearch.utilities.ApplicationUtility;
@@ -172,7 +172,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	}
 
 	@Override
-	public void changeProductGroup(long productSerialNo,String currentGroupName,String newGroupName) {
+	public void changeProductGroup(long productSerialNo,String currentGroupName,String newGroupName) throws AssignmentException {
 		//getting the current group from db
 		Group currentGroup = esDao.getGroupFromGroupName(currentGroupName);
 		List<Product> productList=currentGroup.getProducts();
@@ -187,6 +187,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		//getting new group details
 		Group newGroup= esDao.getGroupFromGroupName(newGroupName);
 		//getting the product list of new group
+		if(newGroup==null)
+			throw new GroupNotFoundException("The Requested Group Does Not Exist");
 		List<Product> newGroupProductList=newGroup.getProducts();
 		//adding the product to existing new group product list
 		newGroupProductList.add(product);

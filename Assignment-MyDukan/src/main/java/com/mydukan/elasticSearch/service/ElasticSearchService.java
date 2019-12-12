@@ -49,8 +49,9 @@ public interface ElasticSearchService {
 	 * @param productSerialNo
 	 * @param currentGroupName
 	 * @param newGroupName
+	 * @throws AssignmentException 
 	 */
-	public void changeProductGroup(long productSerialNo, String currentGroupName, String newGroupName);
+	public void changeProductGroup(long productSerialNo, String currentGroupName, String newGroupName) throws AssignmentException;
 
 	/**
 	 * Fetches the data all groups present in the database.</br>
@@ -58,6 +59,8 @@ public interface ElasticSearchService {
 	 * GROUP_LIST : list of groups available in the db </br>
 	 * TOTAL_PRODUCT_COUNT : total number of products </br>
 	 * TOTAL_COST : total value of all products 
+	 * @param from
+	 * @param size
 	 * @return Map  &ltString, Object&gt
 	 */
 	public Map<String, Object> getGroupData(Integer from,Integer size);
