@@ -105,7 +105,7 @@ Used Elastic Search REST High Level client to perform all data operations on the
 
 Follwing are the APIs present in the application :
 
-- **GET GROUP BY NAME**
+**GET GROUP BY NAME**
 
 Relative path : /elastic_search/getGroupFromName
 
