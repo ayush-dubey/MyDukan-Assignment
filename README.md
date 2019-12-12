@@ -180,3 +180,6 @@ Description : This call will get all the groups present in the elastic search in
 
 
 
+> The connection string can be set from application.properties :
+> elasticsearch.host : sets the elastic search host
+> elasticsearch.host.port : sets the port on which elastic search is hosted
