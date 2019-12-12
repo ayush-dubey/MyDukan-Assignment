@@ -179,7 +179,10 @@ Input Parameter : from (indicates the starting range),
 Description : This call will get all the groups present in the elastic search index based the from and size values
 
 
-
+[df1]
 > The connection string can be set from application.properties :
+
 > elasticsearch.host : sets the elastic search host
+
 > elasticsearch.host.port : sets the port on which elastic search is hosted
+
