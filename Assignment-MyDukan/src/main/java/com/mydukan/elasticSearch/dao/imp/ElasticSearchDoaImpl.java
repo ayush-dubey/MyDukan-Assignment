@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -20,6 +21,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +34,8 @@ import com.mydukan.elasticSearch.dao.ElasticSearchDao;
 @Repository
 public class ElasticSearchDoaImpl implements ElasticSearchDao {
 
+	private static final Logger logger = LoggerFactory.getLogger(ElasticSearchDoaImpl.class);
+	 
 	@Autowired
 	private RestHighLevelClient restHighLevelClient;
 
@@ -40,6 +45,8 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 	@Override
 	public void bulkSave(List<Group> groupList) {
 
+		logger.debug("In bulk Save");
+		
 		BulkRequest bulkReq = new BulkRequest();
 		groupList.forEach(group -> {
 			IndexRequest indexRequest = new IndexRequest(ApplicationConstants.GROUP_INDEX,
@@ -50,11 +57,11 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 
 		try {
 			restHighLevelClient.bulk(bulkReq);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		}catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
+		}catch (IOException e) {
+			logger.error(e.getMessage(),e);
+		} 
 	}
 
 	@Override
@@ -67,8 +74,10 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 			String groupJSON = getResponse.getSourceAsString();
 			if (groupJSON != null)
 				group = objectMapper.readValue(groupJSON, Group.class);
+		}catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return group;
 	}
@@ -79,8 +88,10 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 				ApplicationConstants.GROUP_TYPE, groupName);
 		try {
 			DeleteResponse deleteResponse = restHighLevelClient.delete(deleteRequest);
-		} catch (java.io.IOException e) {
-			e.getLocalizedMessage();
+		} catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
+		}catch (java.io.IOException e) {
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -92,8 +103,10 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 		updateReq.doc(ObjectMap);
 		try {
 			restHighLevelClient.update(updateReq);
+		}catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 
 	}
@@ -107,36 +120,26 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 		updateReq.doc(objectMap);
 		try {
 			restHighLevelClient.update(updateReq);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
+		}catch (IOException e) {
+			logger.error(e.getMessage(),e);
 		}
 
 	}
 
-	/*
-	 * @Override public Group getGroupFromProductSerialNo(long productSerialNo) {
-	 * SearchRequest searchRequest = new
-	 * SearchRequest(ApplicationConstants.GROUP_INDEX); SearchSourceBuilder
-	 * sourceBuilder = new SearchSourceBuilder();
-	 * sourceBuilder.query(QueryBuilders.termQuery("serialNo", productSerialNo));
-	 * searchRequest.source(sourceBuilder); SearchResponse response=null; Group
-	 * group =null; try { response=restHighLevelClient.search(searchRequest,
-	 * RequestOptions.DEFAULT); SearchHits hits =response.getHits(); String json =
-	 * hits.getAt(0).getSourceAsString();; group=objectMapper.readValue(json,
-	 * Group.class); } catch (IOException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } return group; }
-	 */
+
 	@Override
 	public void saveGroup(Group group) {
 		IndexRequest indexRequest = new IndexRequest(ApplicationConstants.GROUP_INDEX, ApplicationConstants.GROUP_TYPE,
 				group.getName()).source(objectMapper.convertValue(group, Map.class));
 		try {
 			restHighLevelClient.index(indexRequest);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
+		}catch (IOException e) {
+			logger.error(e.getMessage(),e);
+		} 
 	}
 
 	@Override
@@ -158,8 +161,10 @@ public class ElasticSearchDoaImpl implements ElasticSearchDao {
 				group = objectMapper.readValue(json, Group.class);
 				groupList.add(group);
 			}
+		}catch(ElasticsearchException e) {
+			logger.error(e.getMessage(),e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return groupList;
 	}

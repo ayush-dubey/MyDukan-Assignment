@@ -32,8 +32,9 @@ public interface ElasticSearchService {
 	 * @param productSerialNo
 	 * @param groupName
 	 * @param price
+	 * @throws AssignmentException 
 	 */
-	public void updateProductPrice(long productSerialNo,String groupName,double price);
+	public void updateProductPrice(long productSerialNo,String groupName,double price) throws AssignmentException;
 	
 	/**
 	 * Add new product if the with group associated to it
@@ -41,8 +42,9 @@ public interface ElasticSearchService {
 	 * along with the product, else the product will be added to group list in DB  
 	 * @param product
 	 * @param group
+	 * @throws AssignmentException 
 	 */
-	public void addNewProduct(Product product, Group group);
+	public void addNewProduct(Product product, Group group) throws AssignmentException;
 
 	/**
 	 * Changes the group of the given product provided it's serial number
@@ -62,6 +64,7 @@ public interface ElasticSearchService {
 	 * @param from
 	 * @param size
 	 * @return Map  &ltString, Object&gt
+	 * @throws AssignmentException 
 	 */
-	public Map<String, Object> getGroupData(Integer from,Integer size);
+	public Map<String, Object> getGroupData(Integer from,Integer size) throws AssignmentException;
 }

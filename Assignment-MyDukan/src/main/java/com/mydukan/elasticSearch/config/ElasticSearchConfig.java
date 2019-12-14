@@ -5,15 +5,24 @@ import java.io.IOException;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.context.annotation.Configuration;
+
+/**
+ * Elastic Search Rest High Level Client Factory 
+ *
+ */
 @Configuration
 public class ElasticSearchConfig extends AbstractFactoryBean {
    
+	Logger logger = LoggerFactory.getLogger(ElasticSearchConfig.class);
+	
 	private RestHighLevelClient restHighLevelClient;
     
-	@Value("${elasticsearch.host.port}")
+	@Value("${elasticsearch.host}")
 	private String elasticSearchHost;
 	
 	@Value("${elasticsearch.host.port}")
@@ -27,13 +36,13 @@ public class ElasticSearchConfig extends AbstractFactoryBean {
     protected RestHighLevelClient createInstance() throws Exception {
         try {
             restHighLevelClient = new RestHighLevelClient(
-                    RestClient.builder(new HttpHost(elasticSearchHost, elasticSearchPort, "http")
-                            //new HttpHost("localhost", 9201, "http")
+                    RestClient.builder(new HttpHost(elasticSearchHost, elasticSearchPort, "http"),
+                            new HttpHost(elasticSearchHost, 9201, "http")
                     )
             );
         }
-        catch (Exception ex){
-            System.out.println(ex.getMessage());
+        catch (Exception e){
+            logger.error(e.getMessage(),e);
         }
         return restHighLevelClient;
     }
@@ -42,7 +51,7 @@ public class ElasticSearchConfig extends AbstractFactoryBean {
         try {
             restHighLevelClient.close();
         } catch (IOException e) {
-            e.printStackTrace();
+        	logger.error(e.getMessage(),e);
         }
     }
 }

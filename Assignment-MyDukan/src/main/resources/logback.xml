@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<configuration>
+   <appender name = "STDOUT" class = "ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+         <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
+      </encoder>
+   </appender>
+   
+   <appender name = "FILE" class = "ch.qos.logback.core.FileAppender">
+      <File>logs/MyDukan.log</File>
+      <encoder>
+         <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
+      </encoder>
+   </appender>
+<!--       <logger name="org.springframework.web" level="error">
+		<appender-ref ref = "FILE"/>
+      <appender-ref ref = "STDOUT"/> 
+	</logger> -->
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+   <logger name="com.mydukan" level="debug">
+		<appender-ref ref = "FILE"/>
+      <appender-ref ref = "STDOUT"/> 
+	</logger>
+
+</configuration>

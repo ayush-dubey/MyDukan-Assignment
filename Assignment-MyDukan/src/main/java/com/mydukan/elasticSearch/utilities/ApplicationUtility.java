@@ -35,31 +35,27 @@ public class ApplicationUtility {
 		XSSFWorkbook workbook = new XSSFWorkbook(fis);
 		Map<String,List<List<String>>> toReturn = new HashMap<>();
 		
-		//XSSFRow row = null;
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 			XSSFSheet spreadsheet= workbook.getSheetAt(i);
 			String spreadSheetName =workbook.getSheetName(i);
 			List<List<String>> rowList = new ArrayList<>();
-			//int rowNum=spreadsheet.getPhysicalNumberOfRows()-spreadsheet.getFirstRowNum();
 			for(Row row : spreadsheet) {
-				//row = spreadsheet.getRow(j);
+				/*
+				 * skipping row if empty
+				 */
 				if(isRowEmpty(row)) {
 					continue;
 				}
 				List<String> cellList = new ArrayList<>(); 
-				for(int k =0;k<row.getLastCellNum();k++) {
+				for (int k = 0; k < row.getLastCellNum(); k++) {
 					Cell cell = row.getCell(k);
-					if(Cell.CELL_TYPE_NUMERIC==cell.getCellType())
+					/*
+					 * converting numeric columns to String 
+					 */
+					if (Cell.CELL_TYPE_NUMERIC == cell.getCellType())
 						cell.setCellType(Cell.CELL_TYPE_STRING);
 					cellList.add(cell.getStringCellValue());
-					/*
-					 * switch (cell.getCellType()) { case Cell.CELL_TYPE_NUMERIC:
-					 * cellList.add(String.valueOf(cell.getNumericCellValue())); break;
-					 * 
-					 * case Cell.CELL_TYPE_STRING:
-					 * 
-					 * break; }
-					 */
+
 				}
 				rowList.add(cellList);
 			}

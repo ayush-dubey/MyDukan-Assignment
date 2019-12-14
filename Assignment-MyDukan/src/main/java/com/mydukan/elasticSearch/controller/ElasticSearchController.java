@@ -37,7 +37,7 @@ public class ElasticSearchController {
 	
 	@RequestMapping(value="/updateProductPrice",method = RequestMethod.PUT)
 	public Map<String,Object> updateProductPrice(@RequestParam long productSerialNo,
-			@RequestParam String groupName, @RequestParam double price) {
+			@RequestParam String groupName, @RequestParam double price)  throws AssignmentException  {
 		service.updateProductPrice(productSerialNo, groupName, price);
 		Map<String,Object> returnMap = new HashMap<>();
 		returnMap.put(ApplicationConstants.API_RESPONSE, "Data Successfully Updated");
@@ -45,7 +45,7 @@ public class ElasticSearchController {
 	}
 	
 	@RequestMapping(value="/addProduct",method = RequestMethod.POST)
-	public Map<String,Object> addProduct(@RequestBody AddProductDTO dto) {
+	public Map<String,Object> addProduct(@RequestBody AddProductDTO dto)  throws AssignmentException {
 		Product product = dto.getProduct();
 		Group group = dto.getGroup();
 		service.addNewProduct(product, group);
@@ -66,7 +66,7 @@ public class ElasticSearchController {
 	}
 	
 	@RequestMapping(value="/getAllGroups",method = RequestMethod.POST)
-	public Map<String,Object> getAllGroups(Integer from,Integer size){
+	public Map<String,Object> getAllGroups(Integer from,Integer size)  throws AssignmentException {
 		return service.getGroupData(from,size);
 	}
 }
